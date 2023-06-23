@@ -9,7 +9,6 @@ const AdminRoute = ({ children }) => {
     if (user.role==='seller') {
         return children;
     }
-
     return <Navigate to='/login' state={{ from: location }}></Navigate>;
 };
 
