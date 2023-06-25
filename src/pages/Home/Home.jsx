@@ -4,11 +4,11 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { formatDate, formatTime } from '../../helpers/helpers';
 import { states } from '../../constant/constant';
-
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
-
+  const navigate = useNavigate();
     const [selectedState, setSelectedState] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [products, setProducts] = useState([]);
@@ -18,23 +18,16 @@ const Home = () => {
     const handleSearch = async () => {
       try {
         const response = await axios.get(`http://localhost:5050/api/products?searchTerm=${searchTerm}&state=${selectedState}`);
-        // console.log(response.data);
-        setProducts(response.data.products);
-        setShowResults(true);
+        const products = response.data.products;
+        setProducts(products);
+    navigate('/product-list', { state: products });
+    navigate('/product-list', { state: setProducts });
       } catch (error) {
         console.error(error);
       }
     };
   
 
-    useEffect(() => {
-      // POST request using fetch inside useEffect React hook
-      fetch(`http://localhost:5050/api/products?searchTerm=${searchTerm}&state=${selectedState}`)
-          .then(res => res.json())
-          .then(data => {
-           setProducts( data.products);
-          })
-  },[selectedState]);
 
 
  
@@ -52,7 +45,7 @@ const Home = () => {
 
 <>
 
-    <div className={`after-search-hidden bg-cover lg:h-[550px] ${showResults ? 'hidden' : 'block'}`} style={{ backgroundImage: `url(${image})` }}>
+    <div className={`after-search-hidden bg-cover lg:h-[550px] `} style={{ backgroundImage: `url(${image})` }}>
     
     <div className="flex  py-16 pl-[200px]">
       <div className=" p-6 bg-white rounded-lg shadow-lg">
@@ -102,8 +95,8 @@ const Home = () => {
 
 
 
-
-  <div className={`initially-hidden ${showResults ? 'block' : 'hidden'} flex items-center mx-auto max-w-[1000px] bg-gray-100 rounded-lg p-2`}>
+{/* 
+  <div className={`initially-hidden  flex items-center mx-auto max-w-[1000px] bg-gray-100 rounded-lg p-2`}>
     <div data-cy="searchbox" className="flex-1">
         <div className="relative flex">
           <input
@@ -150,34 +143,36 @@ const Home = () => {
 </div>
 
 
-<div className={`product-component max-w-[800px] mx-auto ${showResults ? 'block' : 'hidden'}`}>
+<div className={`product-component max-w-[800px] mx-auto `}>
       {products.map((product) => (
-        <div key={product.id} className=" rounded overflow-hidden shadow-xl mx-4 my-6" style={{ height: '160px', width: '700px' }}>
-          <div className="flex">
-                <div className="w-1/3">
-                <img className="h-full w-full object-cover" src={`http://localhost:5050/uploads/${product.thumbnail}`} alt={product.title} />
-                </div>
-                <div className="w-2/3 flex flex-col justify-between">
-                <div className="px-6 py-4">
-                   <div className='mb-1'>
-                   <Link  className=" text-base underline ">{product.category}</Link>
-                   <Link className=" text-base underline ml-2">{product.state}</Link>
-                   </div>
-                    <div className="font-semibold text-xl mb-2">{product.title}</div>
-                    <p className="text-gray-700 text-base">{product.description.slice(0, 100)}.........</p>
-                </div>
-                <div className="px-6 py-4">
-                    <p className="text-gray-700 text-base font-bold">$ {product.price}</p>
-                </div>
-                </div>
-          <div className="px-6 py-4">
-          <p className="text-gray-700 text-sm">{formatTime(product.createdAt)}</p>
-            <p className="text-gray-700 text-sm">{formatDate(product.createdAt)}</p>
+        <Link to={`/details/${product._id}`}>
+          <div key={product.id} className=" rounded overflow-hidden shadow-xl mx-4 my-6" style={{ height: '160px', width: '700px' }}>
+            <div className="flex">
+                  <div className="w-1/3">
+                  <img className="h-full w-full object-cover" src={`http://localhost:5050/uploads/${product.thumbnail}`} alt={product.title} />
+                  </div>
+                  <div className="w-2/3 flex flex-col justify-between">
+                  <div className="px-6 py-4">
+                    <div className='mb-1'>
+                    <Link  className=" text-base underline ">{product.category}</Link>
+                    <Link className=" text-base underline ml-2">{product.state}</Link>
+                    </div>
+                      <div className="font-semibold text-xl mb-2">{product.title}</div>
+                      <p className="text-gray-700 text-base">{product.description.slice(0, 100)}.........</p>
+                  </div>
+                  <div className="px-6 py-4">
+                      <p className="text-gray-700 text-base font-bold">$ {product.price}</p>
+                  </div>
+                  </div>
+            <div className="px-6 py-4">
+            <p className="text-gray-700 text-sm">{formatTime(product.createdAt)}</p>
+              <p className="text-gray-700 text-sm">{formatDate(product.createdAt)}</p>
+            </div>
+            </div>
           </div>
-          </div>
-        </div>
+        </Link>
       ))}
-    </div>
+    </div> */}
 
     </>
   );

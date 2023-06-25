@@ -8,6 +8,9 @@ import Users from "../pages/Dashboard/Users/Users";
 import DashBoardLayout from "../layout/DashBoardLayeout/DashBoardLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import ProductDetails from "../pages/ProductDetails/ProductDetails";
+import ProductList from "../pages/ProductList/ProductList";
+import PostAdd from "../pages/PostAdd/PostAdd";
 
 export const router = createBrowserRouter([
     {
@@ -27,17 +30,18 @@ export const router = createBrowserRouter([
                 element: <Register></Register>
             },
             {
-                path: '/active-order',
-  
+                path: '/post-adds',
+                 element:<PrivateRoute><PostAdd></PostAdd></PrivateRoute>
+            },
+        
+            {
+                path: '/product-list',
+                element: <ProductList/>
             },
             {
-                path: '/users',
-                element: <Users/>
-            },
-            {
-                path: '/update-product/:id',
-                // element: <UpdateProduct></UpdateProduct>,
-                // loader: ({ params }) => fetch(`http://localhost:5000/api/products/by-id/${params.id}`)
+                path: '/details/:id',
+                element: <ProductDetails></ProductDetails>,
+                loader: ({ params }) => fetch(`http://localhost:5050/api/products/${params.id}`)
             }
             ,
         ]
@@ -48,9 +52,13 @@ export const router = createBrowserRouter([
         children:
             [
                 {
-                    path: '/dashboard/registered-startup',
+                    path: '/dashboard',
                     element: <Dashboard />
-                }
+                },
+                {
+                    path: '/dashboard/users',
+                    element: <Users />
+                },
             ]
     },
     {

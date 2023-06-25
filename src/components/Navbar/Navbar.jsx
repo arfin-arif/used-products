@@ -39,6 +39,7 @@ const Navbar = () => {
 
             <div className="mr-2">
               <nav className="flex gap-4 items-center justify-center flex-1">
+                <Link to='/post-adds' className='bg-blue-500 py-2 px-2 rounded-lg font-semibold'>Post Adds </Link>
                 {navItems.map((item) => (
                   (item.label === 'Login' && isLoggedIn) ? null : (
                     <Link
